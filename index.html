@@ -49,9 +49,27 @@
         #vrComfortButton {
             display: none;
         }
+        
+        /* Make link white */
+        .info-panel__controls a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+        
+        .info-panel__controls a:hover {
+            color: var(--below-accent-color);
+        }
     </style>
 </head>
 <body>
+    <div id="info" class="info-panel">
+        <div id="infoTitle" class="info-panel__title">WreckSploration VR</div>
+        <div id="infoControls" class="info-panel__controls">
+            <strong>Controls:</strong> Drag rotate, scroll zoom, double-click focus<br>
+            <strong>VR:</strong> Thumbsticks to move • X/A to toggle dive mode<br>
+            <strong>Learn more:</strong> <a href="https://wrecksploration.au" target="_blank" rel="noopener">wrecksploration.au</a>
+        </div>
+    </div>
     <script type="module">
         import { ModelViewer } from 'belowjs';
 
@@ -296,7 +314,7 @@
 
         const viewer = new ModelViewer(viewerContainer, {
           enableVR: true,
-          showInfo: true,
+          showInfo: false,
           models: models,
           enableVRComfortGlyph: true,
           enableFullscreen: true,
