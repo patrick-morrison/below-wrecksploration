@@ -1,22 +1,40 @@
 <!DOCTYPE html>
+<!--
+    WreckSploration VR
+    Progressive Web App for historic Australian shipwreck exploration
+    
+    Copyright (c) 2025 Patrick Morrison & WreckSploration
+    Built with BelowJS - https://belowjs.com
+    
+    Visit: https://wrecksploration.au
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WreckSploration VR</title>
+    <meta name="description" content="VR and desktop viewer for historic Australian shipwreck 3D models">
+    <meta name="theme-color" content="#001122">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="WreckSploration VR">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚢</text></svg>">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="./wrecksplorationvr_icon.jpg">
     
-    <!-- BelowJS Production Build -->
-    <link rel="stylesheet" href="./below/belowjs.css">
-    
-    <!-- Import map for Three.js -->
+    <!-- Import map for PWA offline support -->
     <script type="importmap">
     {
-      "imports": {
-        "three": "./below/three.module.js"
-      }
+        "imports": {
+            "three": "./below/three.module.js",
+            "belowjs": "./below/belowjs.js"
+        }
     }
     </script>
+    
+    <!-- BelowJS CSS -->
+    <link rel="stylesheet" href="./below/belowjs.css">
     
     <style>
         body, html {
@@ -31,100 +49,245 @@
         #vrComfortButton {
             display: none;
         }
-        
-        /* Style the learn more link */
-        #infoControls a {
-            color: white !important;
-            text-decoration: none;
-        }
-        
-        #infoControls a:hover {
-            color: white !important;
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
-    <!-- Info panel for WreckSploration VR -->
-    <div id="info">
-        <div id="infoTitle">WreckSploration VR</div>
-        <div id="infoControls">
-            <strong>Controls:</strong> Drag rotate, scroll zoom, double-click focus<br>
-            <strong>VR:</strong> Thumbsticks to move • X/A to toggle dive mode<br>
-            <strong>Learn more:</strong> <a href="https://wrecksploration.au" target="_blank" rel="noopener">wrecksploration.au</a>
-        </div>
-    </div>
-
     <script type="module">
-        import { ModelViewer } from './below/belowjs.es.js';
+        import { ModelViewer } from 'belowjs';
 
-        // Model configuration
+        // Model configurations
         const models = {
-          'junee': { 
-            url: './models/Junee-quest.glb', 
-            name: 'Junee', 
+          '1': { 
+            url: './models/01 Junee.glb', 
+            name: ' 1 - Junee', 
             credit: 'WreckSploration',
             initialPositions: {
               desktop: {
-                camera: { x: 24.105, y: 14.974, z: -14.719 },
-                target: { x: 7.352, y: -2.747, z: 2.892 }
+                camera: { x: 32.59, y: 18.80, z: -18.18 },
+                target: { x: 4.07, y: -3.85, z: 5.80 }
               },
               vr: {
-                dolly: { x: 2.274, y: 4.415, z: -0.273 },
-                rotation: { x: 0, y: 2.866, z: 0 }
+                dolly: { x: 29.981, y: 5.488, z: -3.719 },
+                rotation: { x: 0, y: 1.988, z: 0 }
               }
             }
           },
-          'clipper': { 
-            url: './models/Clipper-quest.glb', 
-            name: 'Clipper', 
+          '2': { 
+            url: './models/02 Otway.glb', 
+            name: ' 2 - Cape Otway', 
             credit: 'WreckSploration',
             initialPositions: {
               desktop: {
-                camera: { x: -23.494, y: 21.658, z: 22.856 },
-                target: { x: -9.9, y: -0.568, z: 1.713 }
+                camera: { x: -14.58, y: 39.25, z: 20.21 },
+                target: { x: -2.97, y: -0.32, z: 2.55 }
               },
               vr: {
-                dolly: { x: -11.038, y: 6.353, z: -0.702 },
-                rotation: { x: 0, y: -1.417, z: 0 }
+                dolly: { x: -35.195, y: 7.81, z: 2.331 },
+                rotation: { x: 0, y: -1.269, z: 0 }
               }
             }
           },
-          'cape-otway': { 
-            url: './models/CapeOtway-quest.glb', 
-            name: 'Cape Otway', 
+          '3': { 
+            url: './models/03 Clipper.glb', 
+            name: ' 3 - Clipper', 
             credit: 'WreckSploration',
             initialPositions: {
               desktop: {
-                camera: { x: -26.159, y: 17.615, z: 24.685 },
-                target: { x: -10.63, y: 1.088, z: 4.641 }
+                camera: { x: -16.54, y: 33.81, z: 26.47 },
+                target: { x: -6.48, y: 1.24, z: 2.19 }
               },
               vr: {
-                dolly: { x: 18.034, y: 5.717, z: -6.185 },
-                rotation: { x: 0, y: 2.761, z: 0 }
+                dolly: { x: -1.587, y: 6.847, z: 1.269 },
+                rotation: { x: 0, y: 1.821, z: 0 }
               }
             }
           },
-          'koz-vi': { 
-            url: './models/Koz VI-quest.glb', 
-            name: 'Koz VI', 
+          '4': { 
+            url: './models/04 Koz VII.glb', 
+            name: ' 4 - Koz VII', 
             credit: 'WreckSploration',
             initialPositions: {
               desktop: {
-                camera: { x: 18.63, y: 7.808, z: 12.034 },
-                target: { x: 8.394, y: -0.41, z: -0.441 }
+                camera: { x: -0.74, y: 14.36, z: 23.61 },
+                target: { x: -0.00, y: -0.00, z: -0.00 }
               },
               vr: {
-                dolly: { x: 5.044, y: 0.774, z: -4.029 },
-                rotation: { x: 0, y: 2.539, z: 0 }
+                dolly: { x: 0, y: 2, z: 15 },
+                rotation: { x: 0, y: 0, z: 0 }
+              }
+            }
+          },
+          '5': { 
+            url: './models/05 Sesa.glb', 
+            name: ' 5 - Sesa', 
+            credit: 'WreckSploration',
+            initialPositions: {
+              desktop: {
+                camera: { x: 20.28, y: 6.47, z: 46.79 },
+                target: { x: -3.45, y: -6.19, z: 0.21 }
+              },
+              vr: {
+                dolly: { x: 0, y: 2, z: 15 },
+                rotation: { x: 0, y: 0, z: 0 }
+              }
+            }
+          },
+          '6': { 
+            url: './models/06 Commiles.glb', 
+            name: ' 6 - Commiles', 
+            credit: 'WreckSploration',
+            initialPositions: {
+              desktop: {
+                camera: { x: 1.14, y: 32.74, z: 3.37 },
+                target: { x: 1.46, y: 0.25, z: -0.06 }
+              },
+              vr: {
+                dolly: { x: 0, y: 2, z: 15 },
+                rotation: { x: 0, y: 0, z: 0 }
+              }
+            }
+          },
+          '7': { 
+            url: './models/07 AFrameBarge.glb', 
+            name: ' 7 - A-Frame Barge', 
+            credit: 'WreckSploration',
+            initialPositions: {
+              desktop: {
+                camera: { x: 5.40, y: 10.88, z: -18.29 },
+                target: { x: 1.43, y: -0.19, z: -0.53 }
+              },
+              vr: {
+                dolly: { x: -15.899, y: 3.21, z: -6.736 },
+                rotation: { x: 0, y: -2.029, z: 0 }
+              }
+            }
+          },
+          '8': { 
+            url: './models/08 Knowsley.glb', 
+            name: ' 8 - Knowsley', 
+            credit: 'WreckSploration',
+            initialPositions: {
+              desktop: {
+                camera: { x: 0.17, y: 36.84, z: 15.37 },
+                target: { x: 1.37, y: -1.20, z: 0.21 }
+              },
+              vr: {
+                dolly: { x: 0, y: 2, z: 15 },
+                rotation: { x: 0, y: 0, z: 0 }
+              }
+            }
+          },
+          '9': { 
+            url: './models/09 Eucla.glb', 
+            name: ' 9 - Eucla', 
+            credit: 'WreckSploration',
+            initialPositions: {
+              desktop: {
+                camera: { x: -39.12, y: 8.29, z: 5.08 },
+                target: { x: -8.96, y: -2.41, z: -1.41 }
+              },
+              vr: {
+                dolly: { x: -31.318, y: 1.976, z: -1.725 },
+                rotation: { x: 0, y: -1.392, z: 0 }
+              }
+            }
+          },
+          '10': { 
+            url: './models/10 Gunga.glb', 
+            name: '10 - Gunga', 
+            credit: 'WreckSploration',
+            initialPositions: {
+              desktop: {
+                camera: { x: 0.35, y: 58.05, z: 11.90 },
+                target: { x: 1.06, y: -1.20, z: -6.04 }
+              },
+              vr: {
+                dolly: { x: -4.024, y: 9.955, z: -6.72 },
+                rotation: { x: 0, y: -1.473, z: 0 }
+              }
+            }
+          },
+          '11': { 
+            url: './models/11 Tamerlane.glb', 
+            name: '11 - Tamerlane', 
+            credit: 'WreckSploration',
+            initialPositions: {
+              desktop: {
+                camera: { x: 33.00, y: 16.11, z: 20.75 },
+                target: { x: 10.04, y: -2.04, z: 0.83 }
+              },
+              vr: {
+                dolly: { x: 31.844, y: 4.19, z: -5.984 },
+                rotation: { x: 0, y: 2.138, z: 0 }
+              }
+            }
+          },
+          '12': { 
+            url: './models/12 Thornliebank.glb', 
+            name: '12 - Thornliebank', 
+            credit: 'WreckSploration',
+            initialPositions: {
+              desktop: {
+                camera: { x: 51.88, y: 20.71, z: 5.09 },
+                target: { x: 12.43, y: -6.85, z: 3.51 }
+              },
+              vr: {
+                dolly: { x: 47.171, y: 9.458, z: -7.413 },
+                rotation: { x: 0, y: 2.121, z: 0 }
+              }
+            }
+          },
+          '13': { 
+            url: './models/13 HNLMSKXI.glb', 
+            name: '13 - HNLMS K XI', 
+            credit: 'WreckSploration',
+            initialPositions: {
+              desktop: {
+                camera: { x: -41.16, y: 13.14, z: 3.35 },
+                target: { x: -12.28, y: -3.63, z: -3.34 }
+              },
+              vr: {
+                dolly: { x: -35.359, y: 4.898, z: 1.58 },
+                rotation: { x: 0, y: -1.242, z: 0 }
+              }
+            }
+          },
+          '14': { 
+            url: './models/14 Caithness.glb', 
+            name: '14 - Caithness', 
+            credit: 'WreckSploration',
+            initialPositions: {
+              desktop: {
+                camera: { x: 51.25, y: 21.67, z: 22.55 },
+                target: { x: 11.89, y: -6.36, z: -6.05 }
+              },
+              vr: {
+                dolly: { x: -24.908, y: 3.735, z: 2.136 },
+                rotation: { x: 0, y: -1.3, z: 0 }
+              }
+            }
+          },
+          '15': { 
+            url: './models/15 Timaru.glb', 
+            name: '15 - Timaru', 
+            credit: 'WreckSploration',
+            initialPositions: {
+              desktop: {
+                camera: { x: 36.04, y: 12.79, z: 2.71 },
+                target: { x: 9.56, y: -3.59, z: 2.50 }
+              },
+              vr: {
+                dolly: { x: 32.698, y: 4.335, z: 5.387 },
+                rotation: { x: 0, y: 1.49, z: 0 }
               }
             }
           }
         };
 
-        // Get default model from URL parameter or fallback to 'junee'
+        // Get initial model from URL query string or default to '1'
         const urlParams = new URLSearchParams(window.location.search);
-        const currentModel = urlParams.get('model') || 'junee';
+        const siteId = urlParams.get('site');
+        let currentModel = (siteId && models[siteId]) ? siteId : '1';
         const viewerContainer = document.createElement('div');
         viewerContainer.style.position = 'fixed';
         viewerContainer.style.inset = '0';
@@ -133,37 +296,58 @@
 
         const viewer = new ModelViewer(viewerContainer, {
           enableVR: true,
-          enableControls: true,
-          enableInfo: true,
-          showStats: false,
-          showStatus: false,
-          autoRotate: false,
+          showInfo: true,
           models: models,
-          enableMeasurement: true,
-          enableVRComfortGlyph: false,
-          enableDiveSystem: true, // Enable dive system integration
+          enableVRComfortGlyph: true,
           enableFullscreen: true,
-          audioPath: './sound/', // Audio files for VR experience
+          enableVRAudio: true,
+          audioPath: './sound/',
           viewerConfig: {
             scene: {
-              backgroundColor: '#001122'
+              background: '#001122'
             }
           },
           initialModel: currentModel,
           initialPositions: models[currentModel].initialPositions
         });
         
-        // Handle model selection changes - the ModelViewer will populate the dropdown
-        const dropdown = document.getElementById('modelDropdown');
-        dropdown.addEventListener('change', (event) => {
-          const selectedModelKey = event.target.value;
-          if (selectedModelKey !== currentModel) {
-            console.log('Loading new model:', selectedModelKey);
-            viewer.loadModel(selectedModelKey);
-          }
-        });
+        // Force load the correct model if it's not the first one
+        if (currentModel !== '1') {
+          setTimeout(() => {
+            viewer.loadModel(currentModel);
+          }, 100);
+        }
         
-        // Optionally, you can listen to events on viewer for further customization
+        // Handle model selection changes
+        function attachDropdownListener() {
+          const dropdown = document.querySelector('.model-selector__dropdown');
+          if (dropdown) {
+            dropdown.addEventListener('change', (event) => {
+              const selectedModelKey = event.target.value;
+              if (selectedModelKey !== currentModel) {
+                currentModel = selectedModelKey;
+                viewer.loadModel(selectedModelKey);
+              }
+            });
+          } else {
+            // Retry after a short delay if dropdown not yet in DOM
+            setTimeout(attachDropdownListener, 100);
+          }
+        }
+        attachDropdownListener();
+        
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+              .then(() => {
+                // Service worker registered successfully
+              })
+              .catch(() => {
+                // Service worker registration failed - app will still work without offline features
+              });
+          });
+        }
     </script>
 </body>
 </html>

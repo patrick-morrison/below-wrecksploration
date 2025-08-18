@@ -1,0 +1,28 @@
+{
+  "name": "WreckSploration VR",
+  "short_name": "WreckSploration",
+  "description": "VR and desktop viewer for historic Australian shipwreck 3D models",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#001122",
+  "theme_color": "#001122",
+  "orientation": "any",
+  "categories": ["education", "entertainment", "utilities"],
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "wrecksplorationvr_icon.jpg",
+      "sizes": "any",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "Screenshot.jpeg",
+      "sizes": "any",
+      "type": "image/jpeg"
+    }
+  ]
+}
