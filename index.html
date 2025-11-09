@@ -55,8 +55,41 @@
             color: #ffffff;
             text-decoration: none;
         }
-        
+
         .info-panel__controls a:hover {
+            color: var(--below-accent-color);
+        }
+
+        /* Subtle VR Room link */
+        .vr-room-link {
+            color: rgba(176, 176, 176, 0.15);
+            font-size: 11px;
+            text-decoration: none;
+            transition: color 0.3s ease, opacity 0.3s ease;
+            opacity: 0.25;
+            float: right;
+        }
+
+        .vr-room-link:hover {
+            color: var(--below-accent-color);
+            opacity: 1;
+        }
+
+        /* Subtle BelowJS credit */
+        .belowjs-credit {
+            font-size: 12px;
+            color: rgba(176, 176, 176, 0.7);
+            margin-top: 6px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .belowjs-credit a {
+            color: rgba(176, 176, 176, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        .belowjs-credit a:hover {
             color: var(--below-accent-color);
         }
     </style>
@@ -64,10 +97,12 @@
 <body>
     <div id="info" class="info-panel">
         <div id="infoTitle" class="info-panel__title">WreckSploration VR</div>
+        <span class="belowjs-credit">Built with <a href="https://belowjs.com/" target="_blank" rel="noopener">BelowJS</a></span>
         <div id="infoControls" class="info-panel__controls">
+            <strong>Model:</strong> Use dropdown (top right)<br>
             <strong>Controls:</strong> Drag rotate, scroll zoom, double-click focus<br>
             <strong>VR:</strong> Thumbsticks to move • X/A to toggle dive mode<br>
-            <strong>Learn more:</strong> <a href="https://wrecksploration.au" target="_blank" rel="noopener">wrecksploration.au</a>
+            <strong>Home:</strong> <a href="https://wrecksploration.au" target="_blank" rel="noopener">wrecksploration.au</a> <a href="https://belowvr.wrecksploration.au/" target="_blank" rel="noopener" class="vr-room-link">VR Room</a>
         </div>
     </div>
     <script type="module">
@@ -285,9 +320,9 @@
               }
             }
           },
-          '15': { 
-            url: './models/15 Timaru.glb', 
-            name: '15 - Timaru', 
+          '15': {
+            url: './models/15 Timaru.glb',
+            name: '15 - Timaru',
             credit: 'WreckSploration',
             initialPositions: {
               desktop: {
@@ -299,13 +334,28 @@
                 rotation: { x: 0, y: 1.49, z: 0 }
               }
             }
+          },
+          '16': {
+            url: './models/16 Clevedon.glb',
+            name: '16 - Clevedon',
+            credit: 'WreckSploration',
+            initialPositions: {
+              desktop: {
+                camera: { x: -0.26, y: 44.84, z: 12.44 },
+                target: { x: 0.47, y: -0.76, z: 4.31 }
+              },
+              vr: {
+                dolly: { x: 32.698, y: 4.335, z: 5.387 },
+                rotation: { x: 0, y: 1.49, z: 0 }
+              }
+            }
           }
         };
 
-        // Get initial model from URL query string or default to '1'
+        // Get initial model from URL query string or default to '4' (Koz VII)
         const urlParams = new URLSearchParams(window.location.search);
         const siteId = urlParams.get('site');
-        let currentModel = (siteId && models[siteId]) ? siteId : '1';
+        let currentModel = (siteId && models[siteId]) ? siteId : '4';
         const viewerContainer = document.createElement('div');
         viewerContainer.style.position = 'fixed';
         viewerContainer.style.inset = '0';
@@ -318,41 +368,19 @@
           models: models,
           enableVRComfortGlyph: true,
           enableFullscreen: true,
+          autoLoadFirst: false,
+          enableScreenshot: true,
           enableVRAudio: true,
           audioPath: './sound/',
           viewerConfig: {
             scene: {
               background: '#001122'
             }
-          },
-          initialModel: currentModel,
-          initialPositions: models[currentModel].initialPositions
-        });
-        
-        // Force load the correct model if it's not the first one
-        if (currentModel !== '1') {
-          setTimeout(() => {
-            viewer.loadModel(currentModel);
-          }, 100);
-        }
-        
-        // Handle model selection changes
-        function attachDropdownListener() {
-          const dropdown = document.querySelector('.model-selector__dropdown');
-          if (dropdown) {
-            dropdown.addEventListener('change', (event) => {
-              const selectedModelKey = event.target.value;
-              if (selectedModelKey !== currentModel) {
-                currentModel = selectedModelKey;
-                viewer.loadModel(selectedModelKey);
-              }
-            });
-          } else {
-            // Retry after a short delay if dropdown not yet in DOM
-            setTimeout(attachDropdownListener, 100);
           }
-        }
-        attachDropdownListener();
+        });
+
+        // Explicitly load the initial model (ModelViewer handles dropdown changes internally)
+        setTimeout(() => viewer.loadModel(currentModel), 100);
         
         // Register service worker for PWA - only on Quest devices
         if ('serviceWorker' in navigator) {

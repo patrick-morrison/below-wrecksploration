@@ -33,6 +33,7 @@ const urlsToCache = [
   './models/13 HNLMSKXI.glb',
   './models/14 Caithness.glb',
   './models/15 Timaru.glb',
+  './models/16 Clevedon.glb',
   // Audio files
   './sound/dpv.ogg',
   './sound/dpvhigh.ogg',
