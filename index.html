@@ -55,23 +55,24 @@
             filter: none !important;
         }
         
-        /* Make link white */
-        .info-panel__controls a {
+        /* Make links stand out from regular text */
+        .info-panel__controls a:not(.vr-room-link) {
             color: #ffffff;
             text-decoration: none;
+            font-weight: 500;
         }
 
-        .info-panel__controls a:not([href*="belowjs"]):hover {
+        .info-panel__controls a:not(.vr-room-link):hover {
             color: var(--below-accent-color);
         }
 
         /* Subtle VR Room link */
         .vr-room-link {
-            color: rgba(176, 176, 176, 0.15);
+            color: rgba(176, 176, 176, 0.35);
             font-size: 11px;
             text-decoration: none;
             transition: color 0.3s ease, opacity 0.3s ease;
-            opacity: 0.25;
+            opacity: 0.5;
             float: right;
         }
 
@@ -106,7 +107,7 @@
             <strong>Model:</strong> Dropdown (top right)<br>
             <strong>Controls:</strong> Drag, scroll, double-click<br>
             <strong>VR:</strong> Thumbsticks move • X/A dive mode<br>
-            <a href="https://wrecksploration.au" target="_blank" rel="noopener">wrecksploration.au</a> • <a href="https://belowjs.com/" target="_blank" rel="noopener">BelowJS</a> <a href="https://belowvr.wrecksploration.au/" target="_blank" rel="noopener" class="vr-room-link">VR Room</a>
+            <a href="https://wrecksploration.au" target="_blank" rel="noopener">wrecksploration.au</a> + <a href="https://belowjs.com/" target="_blank" rel="noopener">BelowJS</a> <a href="https://belowvr.wrecksploration.au/" target="_blank" rel="noopener" class="vr-room-link">VR Room</a>
         </div>
     </div>
     <script type="module">
