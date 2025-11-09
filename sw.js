@@ -6,7 +6,7 @@
  * Built with BelowJS - https://belowjs.com
  */
 
-const CACHE_NAME = 'wrecksploration-v4';
+const CACHE_NAME = 'wrecksploration-v1.2';
 const urlsToCache = [
   './',
   './index.html',
