@@ -354,17 +354,22 @@
         }
         attachDropdownListener();
         
-        // Register service worker for PWA
+        // Register service worker for PWA - only on Quest devices
         if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
-              .then(() => {
-                // Service worker registered successfully
-              })
-              .catch(() => {
-                // Service worker registration failed - app will still work without offline features
-              });
-          });
+          // Detect Quest devices via user agent
+          const isQuest = /Quest/i.test(navigator.userAgent) || /OculusBrowser/i.test(navigator.userAgent);
+
+          if (isQuest) {
+            window.addEventListener('load', () => {
+              navigator.serviceWorker.register('./sw.js')
+                .then(() => {
+                  // Service worker registered successfully
+                })
+                .catch(() => {
+                  // Service worker registration failed - app will still work without offline features
+                });
+            });
+          }
         }
     </script>
 </body>
