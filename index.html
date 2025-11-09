@@ -49,6 +49,11 @@
         #vrComfortButton {
             display: none;
         }
+
+        /* Remove glow from title */
+        .info-panel__title {
+            filter: none !important;
+        }
         
         /* Make link white */
         .info-panel__controls a {
@@ -56,7 +61,7 @@
             text-decoration: none;
         }
 
-        .info-panel__controls a:hover {
+        .info-panel__controls a:not([href*="belowjs"]):hover {
             color: var(--below-accent-color);
         }
 
@@ -97,12 +102,11 @@
 <body>
     <div id="info" class="info-panel">
         <div id="infoTitle" class="info-panel__title">WreckSploration VR</div>
-        <span class="belowjs-credit">Built with <a href="https://belowjs.com/" target="_blank" rel="noopener">BelowJS</a></span>
         <div id="infoControls" class="info-panel__controls">
-            <strong>Model:</strong> Use dropdown (top right)<br>
-            <strong>Controls:</strong> Drag rotate, scroll zoom, double-click focus<br>
-            <strong>VR:</strong> Thumbsticks to move • X/A to toggle dive mode<br>
-            <strong>Home:</strong> <a href="https://wrecksploration.au" target="_blank" rel="noopener">wrecksploration.au</a> <a href="https://belowvr.wrecksploration.au/" target="_blank" rel="noopener" class="vr-room-link">VR Room</a>
+            <strong>Model:</strong> Dropdown (top right)<br>
+            <strong>Controls:</strong> Drag, scroll, double-click<br>
+            <strong>VR:</strong> Thumbsticks move • X/A dive mode<br>
+            <a href="https://wrecksploration.au" target="_blank" rel="noopener">wrecksploration.au</a> • <a href="https://belowjs.com/" target="_blank" rel="noopener">BelowJS</a> <a href="https://belowvr.wrecksploration.au/" target="_blank" rel="noopener" class="vr-room-link">VR Room</a>
         </div>
     </div>
     <script type="module">
